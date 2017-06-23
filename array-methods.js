@@ -1,15 +1,14 @@
 var dataset = require('./dataset.json');
 
-var newArray = dataset.bankBalances.filter((element)=>{
-  return  element.amount > 100000;
-});
 
 /*
   create an array with accounts from bankBalances that are
   greater than 100000
   assign the resulting new array to `hundredThousandairs`
 */
-var hundredThousandairs = newArray;
+var hundredThousandairs = dataset.bankBalances.filter((element)=>{
+  return  element.amount > 100000;
+});
 
 /*
   DO NOT MUTATE DATA.
@@ -68,18 +67,15 @@ var datasetWithRoundedDime = dataset.bankBalances.map((element)=>{
     state: element.state,
     roundedDime : Math.round(element.amount * 10) / 10,
   };
-  console.log(element.roundedDime);
 
 });
 
 // set sumOfBankBalances to be the sum of all value held at `amount` for each bank object
 var sumOfBankBalances = dataset.bankBalances.reduce((accumulator, currentValue)=>{
 
-var result = accumulator +=  parseFloat(currentValue.amount);
+  var result = accumulator += parseFloat(currentValue.amount);
 
-
-return Math.round(result * 100) / 100;
-
+  return Math.round(result * 100) / 100;
 
 },0);
 
@@ -94,35 +90,50 @@ return Math.round(result * 100) / 100;
   take each `amount` and add 18.9% interest to it rounded to the nearest cent
   and then sum it all up into one value saved to `sumOfInterests`
  */
+
+
 var sumOfInterests = dataset.bankBalances.filter((element)=>{
 
-  if(element.state === "WI"){
-    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
-    console.log(percent);
-  }
-  if(element.state === "IL"){
-    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
-    console.log(percent);
-  }
-  if(element.state === "WY"){
-    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
-    console.log(percent);
-  }
-  if(element.state === "OH"){
-    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
-    console.log(percent);
-  }
-  if(element.state === "GA"){
-    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
-    console.log(percent);
-  }
-  if(element.state === "DE"){
-    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
-
-    console.log(percent);
+  switch(element.state){
+      case "WI":
+        return element.amount;
+      break;
+      case "IL":
+        return element.amount;
+      break;
+      case "WY":
+        return element.amount;
+      break;
+      case "OH":
+        return element.amount;
+      break;
+      case "GA":
+        return element.amount;
+      break;
+      case "DE":
+        return element.amount;
+      break;
+      default:
+      return;
   }
 
-});
+}).reduce((accumulator,currentValue)=>{
+
+  function percent(amount){
+    return  Math.round(((amount /100) * 18.9) * 100)/100;
+  }
+
+  function parseAdd(percent,amount){
+    return percent + parseFloat(amount);
+  }
+  var perc = percent(currentValue.amount);
+  var final = accumulator += perc;
+
+  return Math.round(accumulator * 100)/100;
+
+},0);
+
+
 
 /*
   aggregate the sum of bankBalance amounts
