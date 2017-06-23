@@ -1,11 +1,15 @@
 var dataset = require('./dataset.json');
 
+var newArray = dataset.bankBalances.filter((element)=>{
+  return  element.amount > 100000;
+});
+
 /*
   create an array with accounts from bankBalances that are
   greater than 100000
   assign the resulting new array to `hundredThousandairs`
 */
-var hundredThousandairs = null;
+var hundredThousandairs = newArray;
 
 /*
   DO NOT MUTATE DATA.
@@ -24,7 +28,15 @@ var hundredThousandairs = null;
     }
   assign the resulting new array to `datasetWithRoundedDollar`
 */
-var datasetWithRoundedDollar = null;
+var datasetWithRoundedDollar = dataset.bankBalances.map((element)=>{
+
+  return {
+    amount: element.amount,
+    state: element.state,
+    rounded : Math.round(element.amount),
+  };
+
+});
 
 /*
   DO NOT MUTATE DATA.
@@ -49,10 +61,27 @@ var datasetWithRoundedDollar = null;
     }
   assign the resulting new array to `roundedDime`
 */
-var datasetWithRoundedDime = null;
+var datasetWithRoundedDime = dataset.bankBalances.map((element)=>{
+
+  return {
+    amount: element.amount,
+    state: element.state,
+    roundedDime : Math.round(element.amount * 10) / 10,
+  };
+  console.log(element.roundedDime);
+
+});
 
 // set sumOfBankBalances to be the sum of all value held at `amount` for each bank object
-var sumOfBankBalances = null;
+var sumOfBankBalances = dataset.bankBalances.reduce((accumulator, currentValue)=>{
+
+var result = accumulator +=  parseFloat(currentValue.amount);
+
+
+return Math.round(result * 100) / 100;
+
+
+},0);
 
 /*
   from each of the following states:
@@ -65,7 +94,35 @@ var sumOfBankBalances = null;
   take each `amount` and add 18.9% interest to it rounded to the nearest cent
   and then sum it all up into one value saved to `sumOfInterests`
  */
-var sumOfInterests = null;
+var sumOfInterests = dataset.bankBalances.filter((element)=>{
+
+  if(element.state === "WI"){
+    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
+    console.log(percent);
+  }
+  if(element.state === "IL"){
+    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
+    console.log(percent);
+  }
+  if(element.state === "WY"){
+    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
+    console.log(percent);
+  }
+  if(element.state === "OH"){
+    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
+    console.log(percent);
+  }
+  if(element.state === "GA"){
+    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
+    console.log(percent);
+  }
+  if(element.state === "DE"){
+    var percent = Math.round(((element.amount /100) * 18.9) * 10)/10;
+
+    console.log(percent);
+  }
+
+});
 
 /*
   aggregate the sum of bankBalance amounts
