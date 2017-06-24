@@ -1,4 +1,5 @@
 var dataset = require('./dataset.json');
+var _ = require('lodash');
 
 
 /*
@@ -134,7 +135,6 @@ var sumOfInterests = dataset.bankBalances.filter((element)=>{
 },0);
 
 
-
 /*
   aggregate the sum of bankBalance amounts
   grouped by state
@@ -151,7 +151,111 @@ var sumOfInterests = dataset.bankBalances.filter((element)=>{
     round this number to the nearest 10th of a cent before moving on.
   )
  */
-var stateSums = null;
+
+
+var newObj = {};
+
+var stateSums = newObj;
+
+dataset.bankBalances.map((element)=>{
+
+  if(newObj.hasOwnProperty(element.state) === false){
+    newObj[element.state] =  parseFloat(element.amount);
+
+  }
+  else if(newObj.hasOwnProperty(element.state) === true){
+    newObj[element.state] +=  parseFloat(element.amount);
+
+  }
+
+  newObj[element.state] =  (Math.round(newObj[element.state] * 100) / 100);
+
+  return newObj;
+});
+
+
+
+
+
+
+  // switch(element.state){
+  //     case "WI":
+  //       return {
+  //         name :element.amount};
+  //     break;
+  //     case "IL":
+  //       return {
+  //         name :element.amount};
+
+  //     break;
+  //     case "WY":
+  //       return {
+  //         name :element.amount};
+
+  //     break;
+  //     case "OH":
+  //       return {
+  //         name :element.amount};
+
+  //     break;
+  //     case "GA":
+  //       return {
+  //         name :element.amount};
+
+  //     break;
+  //     case "DE":
+  //       return console.log({
+  //         name :element.amount});
+
+  //     break;
+  //     default:
+  //     return;
+  // }
+
+
+
+  // switch(element.state){
+  //     case "WI":
+  //       var name = accumulator += parseFloat(element.amount);
+  //       return console.log({
+  //         WI : name,
+  //       });
+  //     break;
+  //     case "IL":
+  //        var name = accumulator += parseFloat(element.amount);
+  //       return console.log({
+  //         IL : name,
+  //       });
+  //     break;
+  //     case "WY":
+  //        var name = accumulator += parseFloat(element.amount);
+  //       return console.log({
+  //         WY : name,
+  //       });
+  //     break;
+  //     case "OH":
+  //        var name = accumulator += parseFloat(element.amount);
+  //       return console.log({
+  //         OH : name,
+  //       });
+  //     break;
+  //     case "GA":
+  //        var name = accumulator += parseFloat(element.amount);
+  //       return console.log({
+  //         GA : name,
+  //       });
+  //     break;
+  //     case "DE":
+  //        var name = accumulator += parseFloat(element.amount);
+  //       return console.log({
+  //         DE : name,
+  //       });
+  //     break;
+  //     default:
+  //     return;
+  // }
+
+
 
 /*
   from each of the following states:
