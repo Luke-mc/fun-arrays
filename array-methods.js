@@ -124,11 +124,8 @@ var sumOfInterests = dataset.bankBalances.filter((element)=>{
     return  Math.round(((amount /100) * 18.9) * 100)/100;
   }
 
-  function parseAdd(percent,amount){
-    return percent + parseFloat(amount);
-  }
   var perc = percent(currentValue.amount);
-  var final = accumulator += perc;
+  accumulator += perc;
 
   return Math.round(accumulator * 100)/100;
 
@@ -175,88 +172,6 @@ dataset.bankBalances.map((element)=>{
 
 
 
-
-
-
-  // switch(element.state){
-  //     case "WI":
-  //       return {
-  //         name :element.amount};
-  //     break;
-  //     case "IL":
-  //       return {
-  //         name :element.amount};
-
-  //     break;
-  //     case "WY":
-  //       return {
-  //         name :element.amount};
-
-  //     break;
-  //     case "OH":
-  //       return {
-  //         name :element.amount};
-
-  //     break;
-  //     case "GA":
-  //       return {
-  //         name :element.amount};
-
-  //     break;
-  //     case "DE":
-  //       return console.log({
-  //         name :element.amount});
-
-  //     break;
-  //     default:
-  //     return;
-  // }
-
-
-
-  // switch(element.state){
-  //     case "WI":
-  //       var name = accumulator += parseFloat(element.amount);
-  //       return console.log({
-  //         WI : name,
-  //       });
-  //     break;
-  //     case "IL":
-  //        var name = accumulator += parseFloat(element.amount);
-  //       return console.log({
-  //         IL : name,
-  //       });
-  //     break;
-  //     case "WY":
-  //        var name = accumulator += parseFloat(element.amount);
-  //       return console.log({
-  //         WY : name,
-  //       });
-  //     break;
-  //     case "OH":
-  //        var name = accumulator += parseFloat(element.amount);
-  //       return console.log({
-  //         OH : name,
-  //       });
-  //     break;
-  //     case "GA":
-  //        var name = accumulator += parseFloat(element.amount);
-  //       return console.log({
-  //         GA : name,
-  //       });
-  //     break;
-  //     case "DE":
-  //        var name = accumulator += parseFloat(element.amount);
-  //       return console.log({
-  //         DE : name,
-  //       });
-  //     break;
-  //     default:
-  //     return;
-  // }
-
-
-
 /*
   from each of the following states:
     Wisconsin
@@ -273,8 +188,50 @@ dataset.bankBalances.map((element)=>{
     round this number to the nearest 10th of a cent before moving on.
   )
  */
-var sumOfHighInterests = null;
 
+
+
+
+var sumOfHighInterests = dataset.bankBalances.filter((element)=>{
+
+  switch(element.state){
+      case "WI":
+         return ;
+      break;
+      case "IL":
+         return ;
+      break;
+      case "WY":
+         return ;
+      break;
+      case "OH":
+         return ;
+      break;
+      case "GA":
+         return ;
+      break;
+      case "DE":
+         return ;
+      break;
+      default:
+        return element.amount;
+  }
+
+
+}).reduce((accumulator,currentValue)=>{
+
+
+    var interest = parseFloat(Math.round(((currentValue.amount /100) * 18.9) * 100)/100);
+
+    if(interest > 50000){
+    accumulator += interest;
+}
+
+  var final =  parseFloat(Math.round(accumulator * 100)/100);
+  return final;
+
+
+},0);
 /*
   set `lowerSumStates` to be an array of two letter state
   abbreviations of each state where the sum of amounts
