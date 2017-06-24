@@ -93,6 +93,11 @@ var sumOfBankBalances = dataset.bankBalances.reduce((accumulator, currentValue)=
  */
 
 
+function percent(amount){
+    return  Math.round(((amount /100) * 18.9) * 100)/100;
+  }
+
+
 var sumOfInterests = dataset.bankBalances.filter((element)=>{
 
   switch(element.state){
@@ -119,10 +124,6 @@ var sumOfInterests = dataset.bankBalances.filter((element)=>{
   }
 
 }).reduce((accumulator,currentValue)=>{
-
-  function percent(amount){
-    return  Math.round(((amount /100) * 18.9) * 100)/100;
-  }
 
   var perc = percent(currentValue.amount);
   accumulator += perc;
@@ -172,6 +173,7 @@ dataset.bankBalances.map((element)=>{
 
 
 
+
 /*
   from each of the following states:
     Wisconsin
@@ -192,43 +194,34 @@ dataset.bankBalances.map((element)=>{
 
 
 
-var sumOfHighInterests = dataset.bankBalances.filter((element)=>{
-
-  switch(element.state){
-      case "WI":
-         return ;
-      break;
-      case "IL":
-         return ;
-      break;
-      case "WY":
-         return ;
-      break;
-      case "OH":
-         return ;
-      break;
-      case "GA":
-         return ;
-      break;
-      case "DE":
-         return ;
-      break;
-      default:
-        return element.amount;
-  }
+var sumOfHighInterests = Object.keys(stateSums).filter((element)=>{
+console.log(element);
+    return ["WI", 'IL','WY','OH','GA','DE'].indexOf(element) === -1;
 
 
-}).reduce((accumulator,currentValue)=>{
+}).map((element)=>{
 
+    return {
+      state: element,
+      amount: stateSums[element],
+    };
 
-    var interest = parseFloat(Math.round(((currentValue.amount /100) * 18.9) * 100)/100);
+}).map((element)=>{
 
-    if(interest > 50000){
-    accumulator += interest;
-}
+    return {
+      interest: (element.amount * 0.189),
+    };
 
-  var final =  parseFloat(Math.round(accumulator * 100)/100);
-  return final;
+}).filter((account)=>{
+
+   return account.interest > 50000;
+
+}).reduce((accumulator,account)=>{
+
+    accumulator += account.interest;
+
+    var final =  parseFloat(Math.round(accumulator * 100)/100);
+    return final;
 
 
 },0);
@@ -237,14 +230,27 @@ var sumOfHighInterests = dataset.bankBalances.filter((element)=>{
   abbreviations of each state where the sum of amounts
   in the state is less than 1,000,000
  */
-var lowerSumStates = null;
+var lowerSumStates = Object.keys(stateSums).filter((state)=>{
+    return stateSums[state] < 1000000;
+});
 
 /*
   aggregate the sum of each state into one hash table
   `higherStateSums` should be the sum of all states with totals greater than 1,000,000
  */
-var higherStateSums = null;
 
+var higherStateSums = Object.keys(stateSums).filter((state)=>{
+      return stateSums[state] > 1000000;
+}).map((state)=>{
+      return {
+        state: state,
+        amount: stateSums[state],
+      };
+}).reduce((accumulator,state)=>{
+      accumulator += state.amount;
+      var final = parseFloat(Math.round(accumulator * 100)/100);
+      return final;
+},0);
 /*
   from each of the following states:
     Wisconsin
@@ -260,7 +266,20 @@ var higherStateSums = null;
   if true set `areStatesInHigherStateSum` to `true`
   otherwise set it to `false`
  */
-var areStatesInHigherStateSum = null;
+var areStatesInHigherStateSum = Object.keys(stateSums).filter((element)=>{
+
+    return ["WI", 'IL','WY','OH','GA','DE'].indexOf(element) !== -1;
+
+}).map((account)=>{
+
+    return {
+      state: account,
+      amount: stateSums[account],
+    };
+
+}).every((account)=>{
+    return account.amount > 2550000;
+  });
 
 /*
   Stretch Goal && Final Boss
@@ -276,7 +295,26 @@ var areStatesInHigherStateSum = null;
   have a sum of account values greater than 2,550,000
   otherwise set it to be `false`
  */
-var anyStatesInHigherStateSum = null;
+var anyStatesInHigherStateSum = Object.keys(stateSums).filter((element)=>{
+
+    return ["WI", 'IL','WY','OH','GA','DE'].indexOf(element) !== -1;
+
+}).map((account)=>{
+
+    return {
+      state: account,
+      amount: stateSums[account],
+    };
+
+}).filter((account)=>{
+
+  return account.amount > 2550000;
+
+}).every((account)=>{
+
+    return account.amount > 2550000;
+
+});
 
 
 module.exports = {
