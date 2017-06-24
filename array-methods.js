@@ -7,9 +7,7 @@ var _ = require('lodash');
   greater than 100000
   assign the resulting new array to `hundredThousandairs`
 */
-var hundredThousandairs = dataset.bankBalances.filter((element)=>{
-  return  element.amount > 100000;
-});
+var hundredThousandairs = dataset.bankBalances.filter(element => element.amount > 100000 );
 
 /*
   DO NOT MUTATE DATA.
@@ -28,15 +26,13 @@ var hundredThousandairs = dataset.bankBalances.filter((element)=>{
     }
   assign the resulting new array to `datasetWithRoundedDollar`
 */
-var datasetWithRoundedDollar = dataset.bankBalances.map((element)=>{
+var datasetWithRoundedDollar = dataset.bankBalances.map(({amount,state})=>({
 
-  return {
-    amount: element.amount,
-    state: element.state,
-    rounded : Math.round(element.amount),
-  };
+    amount,
+    state,
+    rounded : Math.round(amount),
 
-});
+}));
 
 /*
   DO NOT MUTATE DATA.
@@ -61,17 +57,17 @@ var datasetWithRoundedDollar = dataset.bankBalances.map((element)=>{
     }
   assign the resulting new array to `roundedDime`
 */
-var datasetWithRoundedDime = dataset.bankBalances.map((element)=>{
 
-  return {
-    amount: element.amount,
-    state: element.state,
-    roundedDime : Math.round(element.amount * 10) / 10,
-  };
+var datasetWithRoundedDime = dataset.bankBalances.map(({amount, state})=>({
 
-});
+    amount,
+    state,
+    roundedDime : Math.round(amount * 10) / 10,
+
+}));
 
 // set sumOfBankBalances to be the sum of all value held at `amount` for each bank object
+
 var sumOfBankBalances = dataset.bankBalances.reduce((accumulator, currentValue)=>{
 
   var result = accumulator += parseFloat(currentValue.amount);
@@ -94,41 +90,20 @@ var sumOfBankBalances = dataset.bankBalances.reduce((accumulator, currentValue)=
 
 
 function percent(amount){
-    return  Math.round(((amount /100) * 18.9) * 100)/100;
+    var result =   parseFloat(Math.round(((amount /100) * 18.9) * 100)/100);
+    return result;
   }
 
-
-var sumOfInterests = dataset.bankBalances.filter((element)=>{
-
-  switch(element.state){
-      case "WI":
-        return element.amount;
-      break;
-      case "IL":
-        return element.amount;
-      break;
-      case "WY":
-        return element.amount;
-      break;
-      case "OH":
-        return element.amount;
-      break;
-      case "GA":
-        return element.amount;
-      break;
-      case "DE":
-        return element.amount;
-      break;
-      default:
-      return;
-  }
+var sumOfInterests = dataset.bankBalances.filter(({state})=>{
+    return ["WI", 'IL','WY','OH','GA','DE'].indexOf(state) !== -1;
 
 }).reduce((accumulator,currentValue)=>{
 
-  var perc = percent(currentValue.amount);
-  accumulator += perc;
+    var perc = percent(currentValue.amount);
+    accumulator += perc;
 
-  return Math.round(accumulator * 100)/100;
+    var final = (Math.round(accumulator * 100)/100);
+    return final;
 
 },0);
 
@@ -194,33 +169,25 @@ dataset.bankBalances.map((element)=>{
 
 
 
-var sumOfHighInterests = Object.keys(stateSums).filter((element)=>{
-console.log(element);
-    return ["WI", 'IL','WY','OH','GA','DE'].indexOf(element) === -1;
+var sumOfHighInterests = Object.keys(stateSums).filter((state)=>{
+    return ["WI", 'IL','WY','OH','GA','DE'].indexOf(state) === -1;
 
-
-}).map((element)=>{
-
+}).map((state)=>{
+console.log(stateSums);
     return {
-      state: element,
-      amount: stateSums[element],
+      state,
+      amount: (stateSums[state] * 0.189),
     };
 
-}).map((element)=>{
+}).filter((state)=>{
 
-    return {
-      interest: (element.amount * 0.189),
-    };
-
-}).filter((account)=>{
-
-   return account.interest > 50000;
+   return state.amount > 50000;
 
 }).reduce((accumulator,account)=>{
 
-    accumulator += account.interest;
+    accumulator += account.amount;
+    var final =  (Math.round(accumulator * 100)/100);
 
-    var final =  parseFloat(Math.round(accumulator * 100)/100);
     return final;
 
 
